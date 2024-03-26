@@ -94,9 +94,10 @@ class RayCasting:
         # 3D
         if mode == '3D':
             for ray, (depth, proj_height) in enumerate(zip(self.depths,self.proj_heights)):
-                color = [255 / (1 + depth ** 5 * 0.00002)] * 3
+                color = 255 / (1 + depth ** 5 * 0.00002), 200 / (1 + depth ** 5 * 0.00002), 100 / (1 + depth ** 5 * 0.00002)
                 pg.draw.rect(
                     self.game.screen, 
                     color,
-                    (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height)
+                    (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height),
+                    width=2
                 )
