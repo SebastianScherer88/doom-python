@@ -4,7 +4,7 @@ from settings import RES, FPS
 from map import Map
 from player import Player
 from raycasting import RayCasting
-
+from argparse import ArgumentParser
 class Game:
     def __init__(self):
         pg.init()
@@ -44,5 +44,9 @@ class Game:
             self.draw(mode)
         
 if __name__ == '__main__':
+    parser = ArgumentParser(description="Run game in 2D or 3D.")
+    parser.add_argument('-m','--mode',help="Dimension mode to run game in.", choices=['2D','3D'])
+    args = vars(parser.parse_args())
+    
     game = Game()
-    game.run('3D')
+    game.run(args['mode'])
