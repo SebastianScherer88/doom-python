@@ -25,12 +25,11 @@ class ObjectRenderer:
         # 3D - FOV
         elif dimension == 3 and not render_textures:
             for ray, (depth, proj_height, _, _, _) in enumerate(self.game.ray_casting.ray_casting_results):
-                color = 255 / (1 + depth ** 5 * 0.00002), 200 / (1 + depth ** 5 * 0.00002), 100 / (1 + depth ** 5 * 0.00002)
+                color = [255 / (1 + depth ** 5 * 0.00002),] * 3
                 pg.draw.rect(
                     self.game.screen, 
                     color,
                     (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height),
-                    width=2
                 )
         
         # 3D-render: FOV with textures
