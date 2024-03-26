@@ -1,4 +1,4 @@
-from settings import PLAYER_ANGLE, PLAYER_POS, PLAYER_ROT_SPEED, PLAYER_SPEED, PLAYER_SIZE, PLAYER_SIGHT_RANGE, BOX_WIDTH, BOX_HEIGHT, WIDTH, HEIGHT, MINIMAP_POS, MINIMAP_SCALE
+from settings import PLAYER_ANGLE, PLAYER_POS, PLAYER_ROT_SPEED, PLAYER_SPEED, PLAYER_SIZE, PLAYER_SIGHT_RANGE, BOX_WIDTH, BOX_HEIGHT
 import pygame as pg
 import math
 
@@ -55,15 +55,15 @@ class Player:
         if self.check_wall(int(self.pos[0]), int(self.pos[1] + dy)):
             self.y += dy
     
-    def get_drawing_circle_specs(self, mode):
+    def get_drawing_circle_specs(self, dimension):
         
-        x_off, y_off, scale_factor = self.game.map.get_minimap_offset_and_scale_factor(mode)
+        x_off, y_off, scale_factor = self.game.map.get_minimap_offset_and_scale_factor(dimension)
         
         return (x_off + self.pos[0] * BOX_WIDTH * scale_factor, y_off + self.pos[1] * BOX_HEIGHT * scale_factor), int(self.size * scale_factor)
         
-    def get_drawing_line_specs(self, mode):
+    def get_drawing_line_specs(self, dimension):
         
-        x_off, y_off, scale_factor = self.game.map.get_minimap_offset_and_scale_factor(mode)
+        x_off, y_off, scale_factor = self.game.map.get_minimap_offset_and_scale_factor(dimension)
         
         return (
             x_off + self.pos[0] * BOX_WIDTH * scale_factor,
@@ -73,13 +73,13 @@ class Player:
             y_off + (self.pos[1] * BOX_HEIGHT + (PLAYER_SIGHT_RANGE * scale_factor) * self.trig_angle[1]) * scale_factor
         )
     
-    def draw(self, mode):
-        drawing_line_specs = self.get_drawing_line_specs(mode)
+    def draw(self, dimension):
+        drawing_line_specs = self.get_drawing_line_specs(dimension)
         pg.draw.line(self.game.screen, 'green',
                      drawing_line_specs[0], 
                      drawing_line_specs[1],
                      2)
-        drawing_circle_specs = self.get_drawing_circle_specs(mode)
+        drawing_circle_specs = self.get_drawing_circle_specs(dimension)
         pg.draw.circle(self.game.screen, 'yellow',
                        drawing_circle_specs[0], 
                        drawing_circle_specs[1])

@@ -4,6 +4,7 @@ from settings import RES, FPS
 from map import Map
 from player import Player
 from raycasting import RayCasting
+from object_renderer import ObjectRenderer
 from argparse import ArgumentParser
 class Game:
     def __init__(self):
@@ -16,6 +17,7 @@ class Game:
     def new_game(self):
         self.map = Map(self)
         self.player = Player(self)
+        self.object_renderer = ObjectRenderer(self)
         self.ray_casting = RayCasting(self)
     
     def update(self):
@@ -24,11 +26,11 @@ class Game:
         self.ray_casting.update()
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
-    def draw(self, mode):
+    def draw(self, dimension, render_textures):
         self.screen.fill('black')
-        self.ray_casting.draw(mode)
-        self.map.draw(mode)
-        self.player.draw(mode)
+        self.object_renderer.draw(dimension, render_textures)
+        self.map.draw(dimension)
+        self.player.draw(dimension)
         pg.display.flip()
         
     def check_events(self):
@@ -37,16 +39,18 @@ class Game:
                 pg.quit()
                 sys.exit() 
         
-    def run(self, mode):
+    def run(self, dimension, render_textures):
         while True:
             self.check_events()
             self.update()
-            self.draw(mode)
+            self.draw(dimension, render_textures)
         
 if __name__ == '__main__':
     parser = ArgumentParser(description="Run game in 2D or 3D.")
-    parser.add_argument('-m','--mode',help="Dimension mode to run game in.", choices=['2D','3D'])
+    parser.add_argument('-d','--dimension',help="Dimensions in game.", choices=[2,3], type=int)
+    parser.add_argument('-r','--render-textures',help="Whether to render textures. Only relevant in 3D.", action='store_true')
     args = vars(parser.parse_args())
     
     game = Game()
-    game.run(args['mode'])
+    game.run(dimension=args['dimension'],
+             render_textures=args['render_textures'])

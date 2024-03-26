@@ -1,23 +1,38 @@
 import pygame as pg
 import math
-from settings import HALF_FOV, NUM_RAYS, DELTA_ANGLE, MAX_DEPTH, BOX_WIDTH, BOX_HEIGHT, SCREEN_DIST, HALF_HEIGHT, SCALE, MINIMAP_POS, MINIMAP_SCALE
+from settings import HALF_FOV, NUM_RAYS, DELTA_ANGLE, MAX_DEPTH, BOX_WIDTH, BOX_HEIGHT, SCREEN_DIST, HALF_HEIGHT, SCALE, TEXTURE_SIZE
 
 class RayCasting:
     def __init__(self, game):
         self.game = game
         self.trig_angles = []
-        self.depths = []
-        self.proj_heights = []
+        self.ray_casting_results = []
+        self.objects_to_render = []
+        self.textures = self.game.object_renderer.wall_textures
+        
+    def get_objects_to_render(self):
+        self.objects_to_render = []
+        
+        for ray, values in enumerate(self.ray_casting_results):
+            depth, proj_height, texture, offset, (cos_a, sin_a) = values
+            
+            wall_column = self.textures[texture].subsurface(
+                offset * (TEXTURE_SIZE - SCALE), 0, SCALE, TEXTURE_SIZE
+            )
+            wall_column = pg.transform.scale(wall_column, (SCALE, proj_height))
+            wall_pos = (ray * SCALE, HALF_HEIGHT - proj_height // 2)
+            
+            self.objects_to_render.append((depth, wall_column, wall_pos))
         
     def ray_cast(self):
         ox, oy = self.game.player.pos
         x_map, y_map = self.game.player.map_pos
         
+        texture_vert, texture_hor = 1, 1
+        
         ray_angle = self.game.player.angle - HALF_FOV + 0.00001
         
-        self.trig_angles = []
-        self.depths = []
-        self.proj_heights = []
+        self.ray_casting_results = []
         
         for ray in range(NUM_RAYS):
             sin_a = math.sin(ray_angle)
@@ -34,10 +49,10 @@ class RayCasting:
             delta_depth = dy / sin_a
             dx = delta_depth * cos_a
             
-            
             for i in range(MAX_DEPTH):
                 tile_hor = int(x_hor), int(y_hor)
                 if tile_hor in self.game.map.world_map:
+                    texture_hor = self.game.map.world_map[tile_hor]
                     break
                 x_hor += dx
                 y_hor += dy
@@ -55,49 +70,28 @@ class RayCasting:
             for i in range(MAX_DEPTH):
                 tile_vert = int(x_vert), int(y_vert)
                 if tile_vert in self.game.map.world_map:
+                    texture_vert = self.game.map.world_map[tile_vert]
                     break
                 x_vert += dx
                 y_vert += dy
                 depth_vert += delta_depth
                 
-            # depth
+            # depth, texture, offset
             if depth_vert < depth_hor:
-                depth = depth_vert
+                depth, texture = depth_vert, texture_vert
+                y_vert %= 1
+                offset = y_vert if cos_a > 0 else (1 - y_vert)
             else:
-                depth = depth_hor
+                depth, texture = depth_hor, texture_hor
+                x_hor %= 1
+                offset = (1 - x_hor) if sin_a > 0 else x_hor
                 
-            self.depths.append(depth)
-            
-            self.proj_heights.append(SCREEN_DIST / (depth + 0.0001))
+            proj_height = SCREEN_DIST / (depth + 0.0001)
+                
+            self.ray_casting_results.append((depth, proj_height, texture, offset, (cos_a, sin_a)))
                 
             ray_angle += DELTA_ANGLE
     
     def update(self):
         self.ray_cast()
-        
-    def draw(self, mode):
-        
-        # draw line for debug
-        ox, oy = self.game.player.pos
-        
-        # 2D
-        if mode == '2D':
-            for depth, (cos_a, sin_a) in zip(self.depths, self.trig_angles):
-                pg.draw.line(
-                    self.game.screen, 
-                    'yellow',
-                    (ox * BOX_WIDTH, oy * BOX_HEIGHT),
-                    ((ox + depth * cos_a) * BOX_WIDTH  , (oy + depth * sin_a) * BOX_HEIGHT),
-                    2
-                )
-            
-        # 3D
-        if mode == '3D':
-            for ray, (depth, proj_height) in enumerate(zip(self.depths,self.proj_heights)):
-                color = 255 / (1 + depth ** 5 * 0.00002), 200 / (1 + depth ** 5 * 0.00002), 100 / (1 + depth ** 5 * 0.00002)
-                pg.draw.rect(
-                    self.game.screen, 
-                    color,
-                    (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height),
-                    width=2
-                )
+        self.get_objects_to_render()

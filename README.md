@@ -6,12 +6,22 @@ These are some experiments in game development in 2D and 2.5D as per [the excell
 
 To run the game in 2D, run the following command in the command line:
 
-`python main.py -m 2D`.
+## 2D
+
+`python main.py -d 2`.
 
 ![2D screenshot](./image/doom-python-2d.JPG)
 
 To run the game in 3D (or "2.5D"), run
 
-`python main.py -m 3D`
+## 3D
+
+`python main.py -d 3`
 
 ![2.5D screenshot](./image/doom-python-3d.JPG)
+
+To run the game in 3D (or "2.5D") with texture rendering, run
+
+`python main.py -d 3 -r`
+
+![2.5D with texture screenshot](./image/doom-python-3d-texture.JPG)

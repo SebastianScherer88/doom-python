@@ -28,18 +28,18 @@ class Map:
                 if value:
                     self.world_map[(i, j)] = value
                     
-    def get_minimap_offset_and_scale_factor(self,mode):
+    def get_minimap_offset_and_scale_factor(self,dimension):
         
-        if mode == '2D':
+        if dimension == 2:
             x_off, y_off, scale_factor = 0, 0, 1
-        elif mode == '3D':
+        elif dimension == 3:
             x_off, y_off, scale_factor = MINIMAP_POS[0], MINIMAP_POS[1], MINIMAP_SCALE
             
         return x_off, y_off, scale_factor
                     
-    def get_box_drawing_rects(self, mode):
+    def get_box_drawing_rects(self, dimension):
             
-        x_off, y_off, scale_factor = self.get_minimap_offset_and_scale_factor(mode)
+        x_off, y_off, scale_factor = self.get_minimap_offset_and_scale_factor(dimension)
             
         return [
             (
@@ -50,26 +50,21 @@ class Map:
             ) for pos in self.world_map
             ]
                     
-    def draw(self, mode):
+    def draw(self, dimension):
         
         ox, oy = self.game.player.pos
         
-        x_off, y_off, scale_factor = self.get_minimap_offset_and_scale_factor(mode)
+        x_off, y_off, scale_factor = self.get_minimap_offset_and_scale_factor(dimension)
         
-        if mode == '3D':
+        if dimension == 3:
             # minimap background
             pg.draw.rect(self.game.screen, 'darkgray', (x_off, y_off, int(WIDTH * scale_factor), int(HEIGHT * scale_factor)), 0)
         
-        # boxes
-        [pg.draw.rect(self.game.screen, 'white', box_drawing_rect, 2) for box_drawing_rect in self.get_box_drawing_rects(mode)]
-        
-        # fov
-        for ray, (depth, (cos_a,sin_a)) in enumerate(
-            zip(
-                self.game.ray_casting.depths,
-                self.game.ray_casting.trig_angles
-                )
-            ):
+        # boxes - map in 2D, minimap in 3D
+        [pg.draw.rect(self.game.screen, 'white', box_drawing_rect, 2) for box_drawing_rect in self.get_box_drawing_rects(dimension)]
+                
+        # fov - cone on map in 2D, cone on minimap in 3D
+        for ray, (depth, _, _, _, (cos_a,sin_a)) in enumerate(self.game.ray_casting.ray_casting_results):
             pg.draw.line(
                 self.game.screen, 
                 'yellow',
