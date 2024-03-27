@@ -2,6 +2,19 @@
 
 These are some experiments in game development in 2D and 2.5D as per [the excellent youtube tutorial](https://www.youtube.com/watch?v=ECqUrT7IdqQ) by [the awesome  Stanislav Petrov](https://github.com/StanislavPetrovV)
 
+
+# Controls
+
+## Movement
+
+The player moves forward, backward, strides left and right using the `W`, `S`, `A` and `D` keys, respectively.
+
+Note that in `2D`, the keys are locked onto the up, down, left and right directions on the screen regardless of the player's orientation on screen, whereas in `3D` these are all relative to the players orientation.
+
+## Turning
+
+By default, the player turns (i.e. changes orientation) using the mouse. If configured (see below sections), you can instead use the `LEFT` and `RIGHT` arrow keys.
+
 # Running the game
 
 The following command line args are available to configure the game mode:
@@ -33,7 +46,7 @@ To run the game in `2D` using the mouse to turn left/right, run
 
 ![2D screenshot](./image/doom-python-2d-mouse.JPG)
 
-To run the game in `2D` using the LEFT/RIGHT arrow keys to turn left/right, respectively, run
+To run the game in `2D` using the `LEFT`/`RIGHT` arrow keys to turn left/right, respectively, run
 
 `python main.py -d 2 -c k`.
 
