@@ -28,8 +28,9 @@ class Game:
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
     def draw(self, dimension, render_textures, control_rotation):
-        self.screen.fill('black')
-        self.object_renderer.draw(dimension, render_textures)
+        if dimension == 2:
+            self.screen.fill('black')
+        self.object_renderer.draw(dimension, control_rotation, render_textures)
         self.map.draw(dimension)
         self.player.draw(dimension, control_rotation)
         pg.display.flip()

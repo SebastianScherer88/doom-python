@@ -1,14 +1,36 @@
 import pygame as pg
-from settings import TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, SCALE, HALF_HEIGHT
+import math
+from settings import TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, SCALE, WIDTH, HALF_HEIGHT, KEY_ROTATION_FLAG, MOUSE_ROTATION_FLAG, SKY_SCROLLING_RATE, SKY_ROT_SPEED, FLOOR_COLOR
 
 class ObjectRenderer:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
         self.wall_textures = self.load_wall_textures()
+        self.sky_offset = 0
+        self.sky_texture = self.get_texture('resources/textures/sky.png',res=(WIDTH, HALF_HEIGHT))
         
-    def draw(self, dimension, render_textures):
-
+    def draw_background(self, control_rotation):
+        # sky
+        if control_rotation == KEY_ROTATION_FLAG:            
+            keys = pg.key.get_pressed()
+            if keys[pg.K_LEFT]:
+                self.sky_offset -= SKY_ROT_SPEED * SKY_SCROLLING_RATE * self.game.delta_time
+            if keys[pg.K_RIGHT]:
+                self.sky_offset += SKY_ROT_SPEED * SKY_SCROLLING_RATE * self.game.delta_time            
+            
+        elif control_rotation == MOUSE_ROTATION_FLAG:
+            self.sky_offset += self.game.player.rel * SKY_SCROLLING_RATE * self.game.delta_time
+            
+        self.sky_offset %= WIDTH
+        self.screen.blit(self.sky_texture, (WIDTH - self.sky_offset,0))
+        self.screen.blit(self.sky_texture, (-self.sky_offset,0))
+        
+        # floor
+        pg.draw.rect(self.game.screen,FLOOR_COLOR,(0,HALF_HEIGHT,WIDTH, HALF_HEIGHT))
+        
+    def draw(self, dimension, control_rotation, render_textures):
+    
         # 2D - FOV cone
         if dimension == 2:
             ox, oy = self.game.player.pos
@@ -23,18 +45,22 @@ class ObjectRenderer:
                 )
             
         # 3D - FOV
-        elif dimension == 3 and not render_textures:
-            for ray, (depth, proj_height, _, _, _) in enumerate(self.game.ray_casting.ray_casting_results):
-                color = [255 / (1 + depth ** 5 * 0.00002),] * 3
-                pg.draw.rect(
-                    self.game.screen, 
-                    color,
-                    (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height),
-                )
+        elif dimension == 3:
+            self.draw_background(control_rotation)
+            
+            # no wall textures
+            if not render_textures:
+                for ray, (depth, proj_height, _, _, _) in enumerate(self.game.ray_casting.ray_casting_results):
+                    color = [255 / (1 + depth ** 5 * 0.00002),] * 3
+                    pg.draw.rect(
+                        self.game.screen, 
+                        color,
+                        (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height),
+                    )
         
-        # 3D-render: FOV with textures
-        elif dimension == 3 and render_textures:
-            self.render_game_objects()
+            else:
+                # wall textures
+                self.render_game_objects()
                 
     def render_game_objects(self):
         list_objects = self.game.ray_casting.objects_to_render
