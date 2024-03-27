@@ -5,6 +5,8 @@ from map import Map
 from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
+from sprite_object import SpriteObject, AnimatedSprite
+from object_handler import ObjectHandler
 from argparse import ArgumentParser
 class Game:
     def __init__(self):
@@ -19,12 +21,14 @@ class Game:
         self.map = Map(self)
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
+        self.object_handler = ObjectHandler(self)
         self.ray_casting = RayCasting(self)
     
     def update(self, dimension, control_rotation):
         self.delta_time = self.clock.tick(FPS)
         self.player.update(dimension, control_rotation)
         self.ray_casting.update()
+        self.object_handler.update()
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
     def draw(self, dimension, render_textures, control_rotation):

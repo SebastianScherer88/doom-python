@@ -63,7 +63,7 @@ class ObjectRenderer:
                 self.render_game_objects()
                 
     def render_game_objects(self):
-        list_objects = self.game.ray_casting.objects_to_render
+        list_objects = sorted(self.game.ray_casting.objects_to_render, key = lambda obj: obj[0], reverse=True)
         for depth, image, pos in list_objects:
             self.screen.blit(image,pos)
         
