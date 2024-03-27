@@ -1,6 +1,6 @@
 import pygame as pg
 import math
-from settings import HALF_FOV, NUM_RAYS, DELTA_ANGLE, MAX_DEPTH, BOX_WIDTH, BOX_HEIGHT, SCREEN_DIST, HALF_HEIGHT, SCALE, TEXTURE_SIZE
+from settings import HALF_FOV, NUM_RAYS, DELTA_ANGLE, MAX_DEPTH, BOX_WIDTH, BOX_HEIGHT, SCREEN_DIST, HALF_HEIGHT, SCALE, HALF_TEXTURE_SIZE, TEXTURE_SIZE, HEIGHT
 
 class RayCasting:
     def __init__(self, game):
@@ -16,11 +16,19 @@ class RayCasting:
         for ray, values in enumerate(self.ray_casting_results):
             depth, proj_height, texture, offset, (cos_a, sin_a) = values
             
-            wall_column = self.textures[texture].subsurface(
-                offset * (TEXTURE_SIZE - SCALE), 0, SCALE, TEXTURE_SIZE
-            )
-            wall_column = pg.transform.scale(wall_column, (SCALE, proj_height))
-            wall_pos = (ray * SCALE, HALF_HEIGHT - proj_height // 2)
+            if proj_height < HEIGHT:
+                wall_column = self.textures[texture].subsurface(
+                    offset * (TEXTURE_SIZE - SCALE), 0, SCALE, TEXTURE_SIZE
+                )
+                wall_column = pg.transform.scale(wall_column, (SCALE, proj_height))
+                wall_pos = (ray * SCALE, HALF_HEIGHT - proj_height // 2)
+            else:
+                texture_height = TEXTURE_SIZE * HEIGHT / proj_height
+                wall_column = self.textures[texture].subsurface(
+                    offset * (TEXTURE_SIZE - SCALE), HALF_TEXTURE_SIZE - texture_height // 2, SCALE, texture_height
+                )
+                wall_column = pg.transform.scale(wall_column, (SCALE, HEIGHT))
+                wall_pos = (ray * SCALE, 0)
             
             self.objects_to_render.append((depth, wall_column, wall_pos))
         
