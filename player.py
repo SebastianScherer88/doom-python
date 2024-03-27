@@ -10,7 +10,7 @@ class Player:
         self.x, self.y = PLAYER_POS
         self.angle = PLAYER_ANGLE
         
-    def movement(self, control_rotation):
+    def movement(self, dimension, control_rotation):
         
         keys = pg.key.get_pressed()
         
@@ -23,30 +23,48 @@ class Player:
             self.angle %= math.tau
         
         # player move
-        dx, dy = 0, 0
-        d_mag = PLAYER_SPEED * self.game.delta_time
-        sin_a = self.trig_angle[1]
-        cos_a = self.trig_angle[0]
-        d_sin = d_mag * sin_a
-        d_cos = d_mag * cos_a
-        
-        if keys[pg.K_w]:
-            dx += d_cos
-            dy += d_sin
-        if keys[pg.K_a]:
-            dx += d_sin
-            dy += -d_cos
-        if keys[pg.K_s]:
-            dx += -d_cos
-            dy += -d_sin
-        if keys[pg.K_d]:
-            dx += -d_sin
-            dy += d_cos
+        if dimension == 2:
+            dx, dy = 0, 0
+            d_mag = PLAYER_SPEED * self.game.delta_time
+            
+            if keys[pg.K_w]:
+                dy += -1
+            if keys[pg.K_a]:
+                dx += -1
+            if keys[pg.K_s]:
+                dy += 1
+            if keys[pg.K_d]:
+                dx += 1
+            
+            mag = (dx**2 + dy**2)**(1/2)
+            if mag > 0:
+                dx *= d_mag / mag
+                dy *= d_mag / mag
+        elif dimension == 3:
+            dx, dy = 0, 0
+            d_mag = PLAYER_SPEED * self.game.delta_time
+            sin_a = self.trig_angle[1]
+            cos_a = self.trig_angle[0]
+            d_sin = d_mag * sin_a
+            d_cos = d_mag * cos_a
+            
+            if keys[pg.K_w]:
+                dx += d_cos
+                dy += d_sin
+            if keys[pg.K_a]:
+                dx += d_sin
+                dy += -d_cos
+            if keys[pg.K_s]:
+                dx += -d_cos
+                dy += -d_sin
+            if keys[pg.K_d]:
+                dx += -d_sin
+                dy += d_cos
                 
         self.check_wall_collision(dx, dy)
                 
     def update(self, dimension, control_rotation):
-        self.movement(control_rotation)
+        self.movement(dimension, control_rotation)
         
         if control_rotation == MOUSE_ROTATION_FLAG:
             self.mouse_control(dimension)
