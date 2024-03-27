@@ -5,9 +5,10 @@ from map import Map
 from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
-from sprite_object import SpriteObject, AnimatedSprite
+from weapon import Weapon
 from object_handler import ObjectHandler
 from argparse import ArgumentParser
+from sound import Sound
 class Game:
     def __init__(self):
         pg.init()
@@ -23,12 +24,16 @@ class Game:
         self.object_renderer = ObjectRenderer(self)
         self.object_handler = ObjectHandler(self)
         self.ray_casting = RayCasting(self)
+        self.weapon = Weapon(self)
+        self.sound = Sound(self)
     
     def update(self, dimension, control_rotation):
         self.delta_time = self.clock.tick(FPS)
         self.player.update(dimension, control_rotation)
         self.ray_casting.update()
         self.object_handler.update()
+        if dimension == 3:
+            self.weapon.update()
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
     def draw(self, dimension, render_textures, control_rotation):
@@ -37,13 +42,17 @@ class Game:
         self.object_renderer.draw(dimension, control_rotation, render_textures)
         self.map.draw(dimension)
         self.player.draw(dimension, control_rotation)
+        if dimension == 3:
+            self.weapon.draw()
+
         pg.display.flip()
         
     def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 pg.quit()
-                sys.exit() 
+                sys.exit()
+            self.player.single_fire_event(event)
         
     def run(self, dimension, render_textures, control_rotation):
         while True:
