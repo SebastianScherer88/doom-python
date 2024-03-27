@@ -41,13 +41,13 @@ To run the game in `2D` using the LEFT/RIGHT arrow keys to turn left/right, resp
 
 ## **3D**
 
-To run the game in `3D` (or "`2.5D`") without texture rendering (and mouse turning controls), run
+To run the game in `3D` (or "`2.5D`") without texture rendering (and with mouse turning controls), run
 
 `python main.py -d 3`
 
 ![2.5D screenshot](./image/doom-python-3d-mouse.JPG)
 
-To run the game in `3D` (or "`2.5D`") with texture rendering (and mouse turning controls), run
+To run the game in `3D` (or "`2.5D`") with texture rendering (and with mouse turning controls), run
 
 `python main.py -d 3 -r`
 
