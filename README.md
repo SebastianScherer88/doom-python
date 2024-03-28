@@ -15,6 +15,10 @@ Note that in `2D`, the keys are locked onto the up, down, left and right directi
 
 By default, the player turns (i.e. changes orientation) using the mouse. If configured (see below sections), you can instead use the `LEFT` and `RIGHT` arrow keys.
 
+## Shooting 
+
+By default, the player shoots using the left mouse button. If configured (see below sections), you can instead use the `SPACEBAR`.
+
 # Running the game
 
 The following command line args are available to configure the game mode:
@@ -23,7 +27,7 @@ The following command line args are available to configure the game mode:
 PS C:\Users\bettmensch\GitReps\doom-python> python main.py --help
 pygame 2.5.2 (SDL 2.28.3, Python 3.11.8)
 Hello from the pygame community. https://www.pygame.org/contribute.html
-usage: main.py [-h] [-d {2,3}] [-c {m,k}] [-r] [-l {0,1,2}]
+usage: main.py [-h] [-d {2,3}] [-ts {m,k}] [-l {1,2,3}]
 
 Run game in 2D or 3D, toggle texture rendering and controls.
 
@@ -31,41 +35,48 @@ options:
   -h, --help            show this help message and exit
   -d {2,3}, --dimension {2,3}
                         Dimensions in game.
-  -c {m,k}, --control-rotation {m,k}
-                        Whether to turn using left/right arrow keys, or the mouse.
-  -r, --render-textures
-                        Toggle texture rendering on/off. Only relevant in 3D.
-  -l {0,1,2}, --level {0,1,2}
-                        Select a level to play. Defaults to first level.
+  -ts {m,k}, --turn-shoot {m,k}
+                        Whether to turn and shoot using left/right arrow keys and space bar, or the mouse.
+  -l {1,2,3}, --level {1,2,3}
+                        Select a level to play. Defaults to first level (1).
 ```
 
 
 ## **2D**
 
-To run the game in `2D` using the mouse to turn left/right, run
+**WARNING: This game mode is experimental and doesnt have full playability yet.**
 
-`python main.py -d 2 -c m`.
+To run 
 
-![2D screenshot](./image/doom-python-2d-mouse.JPG)
+- the first level of the game,
+- using mouse controls for turning and shooting
 
-To run the game in `2D` using the `LEFT`/`RIGHT` arrow keys to turn left/right, respectively, run
+in `3D` (or "`2.5D`") , run
 
-`python main.py -d 2 -c k`.
+`python main.py -d 2 -ts m -l 1`
 
-![2D screenshot](./image/doom-python-2d.JPG)
+![2D screenshot](./image/doom-python-2d-mouse-level-1.JPG)
+
+To run 
+
+- the first level of the game,
+- using keyobard controls for turning and shooting
+
+in `3D` (or "`2.5D`") , run
+
+`python main.py -d 2 -ts k -l 1`
+
+![2D screenshot](./image/doom-python-2d-keyboard-level-1.JPG)
 
 ## **3D**
 
-To run the game in `3D` (or "`2.5D`") without texture rendering (and with mouse turning controls), run
+To run 
 
-`python main.py -d 3`
+- the second level of the game,
+- using keyobard controls for turning and shooting
 
-![2.5D screenshot](./image/doom-python-3d-mouse.JPG)
+in `3D` (or "`2.5D`") , run
 
-To run the game in `3D` (or "`2.5D`") with texture rendering (and with mouse turning controls), run
+`python main.py -d 3 -ts k -l 2`
 
-`python main.py -d 3 -r`
-
-![2.5D with texture screenshot](./image/doom-python-3d-mouse-texture.JPG)
-
-Add the `-c k` flag to the above commands to switch to LEFT/RIGHT arrow key turning controls.
+![2.5D screenshot](./image/doom-python-3d-level-2.JPG)

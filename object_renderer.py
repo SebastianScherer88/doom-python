@@ -51,7 +51,7 @@ class ObjectRenderer:
     def draw_game_won(self):
         self.screen.blit(self.game_won_screen, (0, 0))
         
-    def draw(self, dimension, control_rotation, render_textures):
+    def draw(self, dimension, control_rotation):
     
         # 2D - FOV cone
         if dimension == 2:
@@ -69,21 +69,8 @@ class ObjectRenderer:
         # 3D - FOV
         elif dimension == 3:
             self.draw_background(control_rotation)
-            
-            # no wall textures
-            if not render_textures:
-                for ray, (depth, proj_height, _, _, _) in enumerate(self.game.ray_casting.ray_casting_results):
-                    color = [255 / (1 + depth ** 5 * 0.00002),] * 3
-                    pg.draw.rect(
-                        self.game.screen, 
-                        color,
-                        (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height),
-                    )
-        
-            else:
-                # wall textures
-                self.render_game_objects()
-                
+            # wall textures, sprites and NPCs
+            self.render_game_objects()
             self.draw_player_health()
                 
     def render_game_objects(self):

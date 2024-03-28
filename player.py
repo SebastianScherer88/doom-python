@@ -40,9 +40,15 @@ class Player:
         if self.damaged and (time_now - self.damaged_time) > PLAYER_DAMAGE_DURATION:
             self.damaged = False
         
-    def single_fire_event(self, event):
-        if event.type == pg.MOUSEBUTTONDOWN:
+    def single_fire_event(self, event, control_rotation):
+        if control_rotation == MOUSE_ROTATION_FLAG and event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1 and not self.shot and not self.game.weapon.reloading:
+                self.game.sound.shotgun.play()
+                self.shot = True
+                self.game.weapon.reloading = True
+        
+        if control_rotation == KEY_ROTATION_FLAG and (event.type == pg.KEYDOWN):
+            if event.key == pg.K_SPACE and not self.shot and not self.game.weapon.reloading:
                 self.game.sound.shotgun.play()
                 self.shot = True
                 self.game.weapon.reloading = True
