@@ -9,6 +9,7 @@ from weapon import Weapon
 from object_handler import ObjectHandler
 from argparse import ArgumentParser
 from sound import Sound
+from pathfinding import PathFinding
 class Game:
     def __init__(self):
         pg.init()
@@ -29,6 +30,7 @@ class Game:
         self.ray_casting = RayCasting(self)
         self.weapon = Weapon(self)
         self.sound = Sound(self)
+        self.pathfinding = PathFinding(self)
     
     def update(self, dimension, control_rotation):
         self.delta_time = self.clock.tick(FPS)
@@ -46,7 +48,7 @@ class Game:
         self.map.draw(dimension)
         self.player.draw(dimension, control_rotation)
         if dimension == 2:
-            [npc.draw_ray_cast() for npc in self.object_handler.npc_list]
+            [npc.draw_movement() for npc in self.object_handler.npc_list]
         if dimension == 3:
             self.weapon.draw()
 
