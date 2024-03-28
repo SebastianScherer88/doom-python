@@ -1,6 +1,8 @@
-from settings import PLAYER_ANGLE, PLAYER_POS, PLAYER_ROT_SPEED, PLAYER_SPEED, PLAYER_SIZE, PLAYER_SIGHT_RANGE, BOX_WIDTH, BOX_HEIGHT, PLAYER_SIZE_SCALE, HALF_WIDTH, HALF_HEIGHT, MOUSE_BORDER_LEFT, MOUSE_BORDER_RIGHT, MOUSE_MAX_REL, MOUSE_SENSITIVITY, MOUSE_BORDER_DOWN, MOUSE_BORDER_UP, MOUSE_CURSOR_SIZE, MOUSE_ROTATION_FLAG, KEY_ROTATION_FLAG
+from settings import PLAYER_ANGLE, PLAYER_POS, PLAYER_ROT_SPEED, PLAYER_SPEED, PLAYER_SIZE, PLAYER_SIGHT_RANGE, PLAYER_DAMAGE_DURATION, PLAYER_REGEN_INTERVAL, PLAYER_REGEN_RATE, BOX_WIDTH, BOX_HEIGHT, PLAYER_SIZE_SCALE, HALF_WIDTH, HALF_HEIGHT, MOUSE_BORDER_LEFT, MOUSE_BORDER_RIGHT, MOUSE_MAX_REL, MOUSE_SENSITIVITY, MOUSE_BORDER_DOWN, MOUSE_BORDER_UP, MOUSE_CURSOR_SIZE, MOUSE_ROTATION_FLAG, KEY_ROTATION_FLAG, PLAYER_MAX_HEALTH
 import pygame as pg
 import math
+from collections import deque
+import os
 
 class Player:
     def __init__(self,game):
@@ -10,6 +12,33 @@ class Player:
         self.x, self.y = PLAYER_POS
         self.angle = PLAYER_ANGLE
         self.shot = False
+        self.health = PLAYER_MAX_HEALTH
+        self.pain_image = pg.image.load('resources/textures/blood_screen.png')
+        self.damaged = False
+        self.damaged_time = pg.time.get_ticks()
+        self.regen_time = pg.time.get_ticks()
+        
+    def get_damage(self, damage):
+        
+        self.game.sound.player_pain.play()
+        self.health -= damage
+        self.damaged = True
+        self.damaged_time = pg.time.get_ticks()
+        
+    def regenerate(self):
+        self.health += PLAYER_REGEN_RATE
+        self.health = min(PLAYER_MAX_HEALTH, self.health)
+        
+    def check_regen_time(self):
+        time_now = pg.time.get_ticks()
+        if time_now - self.regen_time > PLAYER_REGEN_INTERVAL:
+            self.regen_time = time_now
+            self.regenerate()
+            
+    def check_pain_time(self):
+        time_now = pg.time.get_ticks()
+        if self.damaged and (time_now - self.damaged_time) > PLAYER_DAMAGE_DURATION:
+            self.damaged = False
         
     def single_fire_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -72,6 +101,8 @@ class Player:
         self.check_wall_collision(dx, dy)
                 
     def update(self, dimension, control_rotation):
+        self.check_pain_time()
+        self.check_regen_time()
         self.movement(dimension, control_rotation)
         
         if control_rotation == MOUSE_ROTATION_FLAG:
@@ -129,6 +160,9 @@ class Player:
             pg.draw.circle(self.game.screen, 'red',
                         drawing_mouse_cursor_specs[0], 
                         drawing_mouse_cursor_specs[1])
+            
+        if self.damaged:
+            self.game.screen.blit(self.pain_image, (0, 0))
         
         
     def mouse_control(self, dimension):
@@ -175,3 +209,7 @@ class Player:
     @property
     def map_pos(self):
         return int(self.x), int(self.y)
+    
+    @property
+    def alive(self):
+         return self.health > 0

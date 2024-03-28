@@ -2,7 +2,28 @@ from sprite_object import AnimatedSprite
 from random import randint, random, choice
 from settings import HALF_WIDTH
 import math
-from settings import MAX_DEPTH
+from settings import (
+    MAX_DEPTH, 
+    SOLDIER_ATTACK_DIST_MIN,
+    SOLDIER_ATTACK_DIST_MAX,
+    SOLDIER_SPEED,
+    SOLDIER_SIZE,
+    SOLDIER_HEALTH,
+    SOLDIER_ATTACK_DAMAGE,
+    SOLDIER_ACCURACY,
+    CACO_DEMON_ATTACK_DIST,
+    CACO_DEMON_SPEED,
+    CACO_DEMON_SIZE,
+    CACO_DEMON_HEALTH,
+    CACO_DEMON_ATTACK_DAMAGE,
+    CACO_DEMON_ACCURACY,
+    CYBER_DEMON_ATTACK_DIST,
+    CYBER_DEMON_SPEED,
+    CYBER_DEMON_SIZE,
+    CYBER_DEMON_HEALTH,
+    CYBER_DEMON_ATTACK_DAMAGE,
+    CYBER_DEMON_ACCURACY,
+)
 import pygame as pg
 
 class NPC(AnimatedSprite):
@@ -55,6 +76,8 @@ class NPC(AnimatedSprite):
     def attack(self):
         if self.animation_trigger:
             self.game.sound.npc_shot.play()
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
         
     def animate_death(self):
         if not self.alive:
@@ -184,3 +207,39 @@ class NPC(AnimatedSprite):
             
         if self.next_x and self.next_y:
             pg.draw.rect(self.game.screen, 'blue', (100 * self.next_x, 100 * self.next_y, 100, 100))
+            
+class Soldier(NPC):
+    def __init__(self, game, path='resources/sprites/npc/soldier/0.png', pos=(10.5,5.5),
+                 scale=0.6,shift=0.38, animation_time=180):
+        super().__init__(game,path,pos,scale,shift,animation_time)
+        
+        self.attack_dist = randint(SOLDIER_ATTACK_DIST_MIN, SOLDIER_ATTACK_DIST_MAX)
+        self.speed = SOLDIER_SPEED
+        self.size = SOLDIER_SIZE
+        self.health = SOLDIER_HEALTH
+        self.attack_damage = SOLDIER_ATTACK_DAMAGE
+        self.accuracy = SOLDIER_ACCURACY
+
+class CacoDemon(NPC):
+    def __init__(self, game, path='resources/sprites/npc/caco_demon/0.png', pos=(10.5,5.5),
+                 scale=0.6,shift=0.38, animation_time=180):
+        super().__init__(game,path,pos,scale,shift,animation_time)
+        
+        self.attack_dist = CACO_DEMON_ATTACK_DIST
+        self.speed = CACO_DEMON_SPEED
+        self.size = CACO_DEMON_SIZE
+        self.health = CACO_DEMON_HEALTH
+        self.attack_damage = CACO_DEMON_ATTACK_DAMAGE
+        self.accuracy = CACO_DEMON_ACCURACY
+
+class CyberDemon(NPC):
+    def __init__(self, game, path='resources/sprites/npc/cyber_demon/0.png', pos=(10.5,5.5),
+                 scale=1,shift=0.1, animation_time=180):
+        super().__init__(game,path,pos,scale,shift,animation_time)
+        
+        self.attack_dist = CYBER_DEMON_ATTACK_DIST
+        self.speed = CYBER_DEMON_SPEED
+        self.size = CYBER_DEMON_SIZE
+        self.health = CYBER_DEMON_HEALTH
+        self.attack_damage = CYBER_DEMON_ATTACK_DAMAGE
+        self.accuracy = CYBER_DEMON_ACCURACY

@@ -1,6 +1,6 @@
 import pygame as pg
 import math
-from settings import TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, SCALE, WIDTH, HALF_HEIGHT, KEY_ROTATION_FLAG, MOUSE_ROTATION_FLAG, SKY_SCROLLING_RATE, SKY_ROT_SPEED, FLOOR_COLOR
+from settings import TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, SCALE, RES, WIDTH, HALF_HEIGHT, KEY_ROTATION_FLAG, MOUSE_ROTATION_FLAG, SKY_SCROLLING_RATE, SKY_ROT_SPEED, FLOOR_COLOR
 
 class ObjectRenderer:
     def __init__(self, game):
@@ -9,6 +9,22 @@ class ObjectRenderer:
         self.wall_textures = self.load_wall_textures()
         self.sky_offset = 0
         self.sky_texture = self.get_texture('resources/textures/sky.png',res=(WIDTH, HALF_HEIGHT))
+        self.blood_screen = self.get_texture('resources/textures/blood_screen.png', RES)
+        self.digit_size = 90
+        self.digit_images = [self.get_texture(f'resources/textures/digits/{i}.png', [self.digit_size] * 2) for i in range(11)]
+        self.digits = dict(zip(map(str, range(11)), self.digit_images))
+        self.game_over_screen = self.get_texture(path='resources/textures/game_over.png',res=RES)
+        self.game_won_screen = self.get_texture(path='resources/textures/win.png',res=RES)
+        
+    def player_damage(self):
+        self.screen.blit(self.blood_screen, (0 ,0))
+        
+    def draw_player_health(self):
+        if self.game.player.alive:
+            health = str(self.game.player.health)
+            for i, char in enumerate(health):
+                self.screen.blit(self.digits[char], (i * self.digit_size, 0))
+            self.screen.blit(self.digits['10'], ((i + 1) * self.digit_size, 0))
         
     def draw_background(self, control_rotation):
         # sky
@@ -28,6 +44,12 @@ class ObjectRenderer:
         
         # floor
         pg.draw.rect(self.game.screen,FLOOR_COLOR,(0,HALF_HEIGHT,WIDTH, HALF_HEIGHT))
+        
+    def draw_game_over(self):
+        self.screen.blit(self.game_over_screen, (0, 0))
+        
+    def draw_game_won(self):
+        self.screen.blit(self.game_won_screen, (0, 0))
         
     def draw(self, dimension, control_rotation, render_textures):
     
@@ -61,6 +83,8 @@ class ObjectRenderer:
             else:
                 # wall textures
                 self.render_game_objects()
+                
+            self.draw_player_health()
                 
     def render_game_objects(self):
         list_objects = sorted(self.game.ray_casting.objects_to_render, key = lambda obj: obj[0], reverse=True)

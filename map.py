@@ -1,25 +1,13 @@
 import pygame as pg
-from settings import BOX_WIDTH, BOX_HEIGHT, MINIMAP_POS, MINIMAP_SCALE, WIDTH, HEIGHT
-
-_ = False
-mini_map = [
-    [2, 2, 2, 5, 2, 2, 2, 5, 2, 2, 2, 2, 5, 2, 2, 2,],
-    [1, _, _, _, _, _, _, _, _, _, _, _, _, _, _, 1,],
-    [4, _, _, 3, 3, 1, 3, _, _, _, 1, 3, 4, _, _, 3,],
-    [1, _, _, _, _, _, 3, _, _, _, _, _, 3, _, _, 3,],
-    [1, _, _, _, _, _, 4, _, _, _, _, _, 4, _, _, 1,],
-    [4, _, _, 3, 3, 3, 1, _, _, _, _, _, _, _, _, 3,],
-    [1, _, _, _, _, _, _, _, _, _, _, _, _, _, _, 1,],
-    [1, _, _, 5, _, _, _, 5, _, _, _, _, _, _, _, 4,],
-    [1, 1, 3, 1, 3, 4, 3, 1, 3, 4, 3, 1, 1, 3, 1, 3,],
-]
+from settings import BOX_WIDTH, BOX_HEIGHT, MINIMAP_BOTTOM_RIGHT, MINIMAP_SCALE, WIDTH, HEIGHT
 
 class Map:
     def __init__(self, game):
         self.game = game
-        self.mini_map = mini_map
+        self.mini_map = game.level.map
         self.world_map = {}
         self.get_map()
+        self.dimension = len(self.mini_map[0]), len(self.mini_map)
         
     def get_map(self):
         
@@ -33,7 +21,11 @@ class Map:
         if dimension == 2:
             x_off, y_off, scale_factor = 0, 0, 1
         elif dimension == 3:
-            x_off, y_off, scale_factor = MINIMAP_POS[0], MINIMAP_POS[1], MINIMAP_SCALE
+            
+            #x_off, y_off, scale_factor = MINIMAP_BOTTOM_RIGHT[0], MINIMAP_BOTTOM_RIGHT[1], MINIMAP_SCALE
+            scale_factor = MINIMAP_SCALE
+            x_off = MINIMAP_BOTTOM_RIGHT[0] - self.dimension[0] * BOX_WIDTH * scale_factor
+            y_off = MINIMAP_BOTTOM_RIGHT[1] - self.dimension[1] * BOX_HEIGHT * scale_factor
             
         return x_off, y_off, scale_factor
                     
@@ -48,7 +40,7 @@ class Map:
                 int(BOX_WIDTH * scale_factor), 
                 int(BOX_HEIGHT * scale_factor)
             ) for pos in self.world_map
-            ]
+        ]
                     
     def draw(self, dimension):
         
@@ -58,7 +50,7 @@ class Map:
         
         if dimension == 3:
             # minimap background
-            pg.draw.rect(self.game.screen, 'darkgray', (x_off, y_off, int(WIDTH * scale_factor), int(HEIGHT * scale_factor)), 0)
+            pg.draw.rect(self.game.screen, 'darkgray', (x_off, y_off, int(self.dimension[0] * BOX_WIDTH * scale_factor), int(self.dimension[1] * BOX_HEIGHT * scale_factor)), 0)
         
         # boxes - map in 2D, minimap in 3D
         [pg.draw.rect(self.game.screen, 'white', box_drawing_rect, 2) for box_drawing_rect in self.get_box_drawing_rects(dimension)]
