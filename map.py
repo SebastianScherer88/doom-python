@@ -21,8 +21,6 @@ class Map:
         if dimension == 2:
             x_off, y_off, scale_factor = 0, 0, 1
         elif dimension == 3:
-            
-            #x_off, y_off, scale_factor = MINIMAP_BOTTOM_RIGHT[0], MINIMAP_BOTTOM_RIGHT[1], MINIMAP_SCALE
             scale_factor = MINIMAP_SCALE
             x_off = MINIMAP_TOP_RIGHT[0] - self.dimension[0] * BOX_WIDTH * scale_factor
             y_off = MINIMAP_TOP_RIGHT[1]
@@ -64,4 +62,3 @@ class Map:
                 (x_off + (ox + depth * cos_a) * BOX_WIDTH * scale_factor  , y_off + (oy + depth * sin_a) * BOX_HEIGHT * scale_factor),
                 2
             )
-    
