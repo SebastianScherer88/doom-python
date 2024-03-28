@@ -99,7 +99,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(description="Run game in 2D or 3D, toggle texture rendering and controls.")
     parser.add_argument('-d','--dimension',help="Dimensions in game.", choices=[2,3], type=int)
     parser.add_argument('-ts','--turn-shoot',help="Whether to turn and shoot using left/right arrow keys and space bar, or the mouse.", choices=[MOUSE_ROTATION_FLAG, KEY_ROTATION_FLAG], default=MOUSE_ROTATION_FLAG)
-    parser.add_argument('-l','--level',help="Select a level to play. Defaults to first level (1).", choices=[1, 2, 3], type=int)
+    parser.add_argument('-l','--level',help="Select a level to play. Defaults to first level.", choices=[1, 2, 3], type=int, default=1)
     args = vars(parser.parse_args())
     
     args['level'] -= 1
