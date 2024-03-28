@@ -1,6 +1,14 @@
-# Overview
+# Overview :sunrise_over_mountains:
 
 These are some experiments in game development in 2D and 2.5D as per [the excellent youtube tutorial](https://www.youtube.com/watch?v=ECqUrT7IdqQ) by [the awesome  Stanislav Petrov](https://github.com/StanislavPetrovV)
+
+## Quickstart
+
+To run the game, run
+
+```bash
+python main.py
+```
 
 
 # Controls
@@ -53,7 +61,9 @@ To run
 
 in `3D` (or "`2.5D`") , run
 
-`python main.py -d 2 -ts m -l 1`
+```bash
+python main.py -d 2 -ts m -l 1
+```
 
 ![2D screenshot](./image/doom-python-2d-mouse-level-1.JPG)
 
@@ -64,7 +74,9 @@ To run
 
 in `3D` (or "`2.5D`") , run
 
-`python main.py -d 2 -ts k -l 1`
+```bash
+python main.py -d 2 -ts k -l 1
+```
 
 ![2D screenshot](./image/doom-python-2d-keyboard-level-1.JPG)
 
@@ -77,6 +89,8 @@ To run
 
 in `3D` (or "`2.5D`") , run
 
-`python main.py -d 3 -ts k -l 2`
+```bash
+python main.py -d 3 -ts k -l 2
+```
 
 ![2.5D screenshot](./image/doom-python-3d-level-2.JPG)
