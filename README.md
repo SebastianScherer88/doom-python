@@ -23,7 +23,7 @@ The following command line args are available to configure the game mode:
 PS C:\Users\bettmensch\GitReps\doom-python> python main.py --help
 pygame 2.5.2 (SDL 2.28.3, Python 3.11.8)
 Hello from the pygame community. https://www.pygame.org/contribute.html
-usage: main.py [-h] [-d {2,3}] [-c {m,k}] [-r]
+usage: main.py [-h] [-d {2,3}] [-c {m,k}] [-r] [-l {0,1,2}]
 
 Run game in 2D or 3D, toggle texture rendering and controls.
 
@@ -35,6 +35,8 @@ options:
                         Whether to turn using left/right arrow keys, or the mouse.
   -r, --render-textures
                         Toggle texture rendering on/off. Only relevant in 3D.
+  -l {0,1,2}, --level {0,1,2}
+                        Select a level to play. Defaults to first level.
 ```
 
 
