@@ -2,7 +2,7 @@
 
 These are some experiments in game development in 2D and 2.5D as per [the excellent youtube tutorial](https://www.youtube.com/watch?v=ECqUrT7IdqQ) by [the awesome  Stanislav Petrov](https://github.com/StanislavPetrovV)
 
-## Quickstart
+## Quickstart :rocket:
 
 To run the game, run
 
@@ -11,23 +11,23 @@ python main.py
 ```
 
 
-# Controls
+# Controls :video_game:
 
-## Movement
+## Movement :running:
 
 The player moves forward, backward, strides left and right using the `W`, `S`, `A` and `D` keys, respectively.
 
 Note that in `2D`, the keys are locked onto the up, down, left and right directions on the screen regardless of the player's orientation on screen, whereas in `3D` these are all relative to the players orientation.
 
-## Turning
+## Turning :arrows_counterclockwise:
 
 By default, the player turns (i.e. changes orientation) using the mouse. If configured (see below sections), you can instead use the `LEFT` and `RIGHT` arrow keys.
 
-## Shooting 
+## Shooting :dart:
 
 By default, the player shoots using the left mouse button. If configured (see below sections), you can instead use the `SPACEBAR`.
 
-# Running the game
+# Running the game :clapper:
 
 The following command line args are available to configure the game mode:
 
@@ -50,7 +50,7 @@ options:
 ```
 
 
-## **2D**
+## **2D** :two:
 
 **WARNING: This game mode is experimental and doesnt have full playability yet.**
 
@@ -80,7 +80,7 @@ python main.py -d 2 -ts k -l 1
 
 ![2D screenshot](./image/doom-python-2d-keyboard-level-1.JPG)
 
-## **3D**
+## **3D** :three:
 
 To run 
 
