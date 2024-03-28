@@ -81,6 +81,7 @@ LEVELS = [
         # npcs
         [
             (CacoDemon, {'pos':(5.5, 7.5)}),
+            (CyberDemon, {'pos':(4.5, 16.5)}),
         ]
     ),
     (

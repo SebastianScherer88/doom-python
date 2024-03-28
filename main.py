@@ -12,13 +12,13 @@ from argparse import ArgumentParser
 from sound import Sound
 from pathfinding import PathFinding
 class Game:
-    def __init__(self):
+    def __init__(self, level_index = 0):
         pg.init()
         pg.mouse.set_visible(False)
         self.screen = pg.display.set_mode(RES)
         self.clock = pg.time.Clock()
         self.delta_time = 1
-        self.level_index = 0
+        self.level_index = level_index
         self.new_game()
         
     def new_game(self):
@@ -99,9 +99,10 @@ if __name__ == '__main__':
     parser.add_argument('-d','--dimension',help="Dimensions in game.", choices=[2,3], type=int)
     parser.add_argument('-c','--control-rotation',help="Whether to turn using left/right arrow keys, or the mouse.", choices=[MOUSE_ROTATION_FLAG, KEY_ROTATION_FLAG], default=MOUSE_ROTATION_FLAG)
     parser.add_argument('-r','--render-textures',help="Toggle texture rendering on/off. Only relevant in 3D.", action='store_true')
+    parser.add_argument('-l','--level',help="Select a level to play. Defaults to first level.", choices=[0, 1, 2], type=int)
     args = vars(parser.parse_args())
     
-    game = Game()
+    game = Game(args['level'])
     game.run(dimension=args['dimension'],
              render_textures=args['render_textures'],
              control_rotation=args['control_rotation'])
