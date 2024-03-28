@@ -1,5 +1,5 @@
 import pygame as pg
-from settings import BOX_WIDTH, BOX_HEIGHT, MINIMAP_BOTTOM_RIGHT, MINIMAP_SCALE, WIDTH, HEIGHT
+from settings import BOX_WIDTH, BOX_HEIGHT, MINIMAP_TOP_RIGHT, MINIMAP_SCALE, WIDTH, HEIGHT
 
 class Map:
     def __init__(self, game):
@@ -24,8 +24,8 @@ class Map:
             
             #x_off, y_off, scale_factor = MINIMAP_BOTTOM_RIGHT[0], MINIMAP_BOTTOM_RIGHT[1], MINIMAP_SCALE
             scale_factor = MINIMAP_SCALE
-            x_off = MINIMAP_BOTTOM_RIGHT[0] - self.dimension[0] * BOX_WIDTH * scale_factor
-            y_off = MINIMAP_BOTTOM_RIGHT[1] - self.dimension[1] * BOX_HEIGHT * scale_factor
+            x_off = MINIMAP_TOP_RIGHT[0] - self.dimension[0] * BOX_WIDTH * scale_factor
+            y_off = MINIMAP_TOP_RIGHT[1]
             
         return x_off, y_off, scale_factor
                     
