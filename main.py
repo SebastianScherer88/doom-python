@@ -40,6 +40,7 @@ class Game:
         self.object_handler.update()
         if dimension == 3:
             self.weapon.update()
+        self.level.update()
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
     def draw(self, dimension, render_textures, control_rotation):

@@ -1,6 +1,7 @@
 from sprite_object import SpriteObject, AnimatedSprite
 from npc import Soldier, CacoDemon, CyberDemon
-from settings import STATIC_SPRITE_PATH, ANIM_SPRITE_PATH
+from settings import STATIC_SPRITE_PATH, ANIM_SPRITE_PATH, LEVEL_COMPLETED_DELAY
+import pygame as pg
 
 _ = False
 LEVELS = [
@@ -128,6 +129,9 @@ class Level:
         self.sprite_specs = level_sprite_specs
         self.npc_specs = level_npc_specs
         
+        self.over = False
+        self.completed_time = 0
+        
     @property
     def completed(self):
         return all([not npc.alive for npc in self.game.object_handler.npc_list])
@@ -136,6 +140,14 @@ class Level:
     def failed(self):
         return not self.game.player.alive
     
-    @property
-    def over(self):
-        return self.completed or self.failed
+    def check_over(self):
+        if not self.completed_time and self.completed:
+            self.completed_time = pg.time.get_ticks()
+        
+        time_now = pg.time.get_ticks()
+        
+        if self.failed or (self.completed and time_now - self.completed_time > LEVEL_COMPLETED_DELAY):
+            self.over = True
+    
+    def update(self):
+        self.check_over()
