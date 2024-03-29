@@ -1,9 +1,9 @@
 # Table of contents
 
-1. [Overview](#overview)
-2. [Quickstart](#quickstart)
-3. [Controls](#controls)
-4. [Running the game](#running-the-game)
+1. [Overview :sunrise_over_mountains:](#overview-sunrise_over_mountains)
+2. [Quickstart :rocket:](#quickstart-rocket)
+3. [Controls :video_game:](#controls-video_game)
+4. [Running the game :clapper:](#running-the-game-clapper)
 
 # Overview :sunrise_over_mountains:
 
