@@ -4,6 +4,14 @@ These are some experiments in game development in 2D and 2.5D as per [the excell
 
 ## Quickstart :rocket:
 
+This game was developed and tested using python `3.11.8`.
+
+To install the python dependencies, run
+
+```bash
+pip install -r requirements.txt
+```
+
 To run the game, run
 
 ```bash
