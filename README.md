@@ -1,8 +1,15 @@
+# Table of contents
+
+1. [Overview](#overview)
+2. [Quickstart](#quickstart)
+3. [Controls](#controls)
+4. [Running the game](#running-the-game)
+
 # Overview :sunrise_over_mountains:
 
 These are some experiments in game development in 2D and 2.5D as per [the excellent youtube tutorial](https://www.youtube.com/watch?v=ECqUrT7IdqQ) by [the awesome  Stanislav Petrov](https://github.com/StanislavPetrovV)
 
-## Quickstart :rocket:
+# Quickstart :rocket:
 
 This game was developed and tested using python `3.11.8`.
 
