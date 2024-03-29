@@ -1,6 +1,6 @@
 import pygame as pg
 import math
-from settings import TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, MESSAGE_FONT, RES, WIDTH, HALF_HEIGHT, HALF_WIDTH, KEY_ROTATION_FLAG, MOUSE_ROTATION_FLAG, SKY_SCROLLING_RATE, SKY_ROT_SPEED, FLOOR_COLOR
+from settings import PLAYER_LIFE_ICON_RES, TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, MESSAGE_FONT, RES, WIDTH, HALF_HEIGHT, HALF_WIDTH, KEY_ROTATION_FLAG, MOUSE_ROTATION_FLAG, SKY_SCROLLING_RATE, SKY_ROT_SPEED, FLOOR_COLOR
 
 class ObjectRenderer:
     def __init__(self, game):
@@ -12,20 +12,24 @@ class ObjectRenderer:
         self.blood_screen = self.get_texture('resources/textures/blood_screen.png', RES)
         self.digit_size = 90
         self.digit_images = [self.get_texture(f'resources/textures/digits/{i}.png', [self.digit_size] * 2) for i in range(11)]
+        self.player_life_size = 90
+        self.player_life_image = self.get_texture('resources/sprites/npc/soldier/0.png',[self.player_life_size]*2)
         self.digits = dict(zip(map(str, range(11)), self.digit_images))
         self.game_over_screen = self.get_texture(path='resources/textures/game_over.png',res=RES)
         self.game_won_screen = self.get_texture(path='resources/textures/win.png',res=RES)
         self.message_font = pg.font.SysFont(MESSAGE_FONT, 85)
         
-    def player_damage(self):
-        self.screen.blit(self.blood_screen, (0 ,0))
-        
     def draw_player_health(self):
         if self.game.player.alive:
+            player_lives_offset = self.player_life_size * self.game.n_player_lives + 50
             health = str(self.game.player.health)
             for i, char in enumerate(health):
-                self.screen.blit(self.digits[char], (i * self.digit_size, 0))
-            self.screen.blit(self.digits['10'], ((i + 1) * self.digit_size, 0))
+                self.screen.blit(self.digits[char], (player_lives_offset + i * self.digit_size, 0))
+            self.screen.blit(self.digits['10'], (player_lives_offset + (i + 1) * self.digit_size, 0))
+            
+    def draw_player_lives(self):
+        for i in range(self.game.n_player_lives):
+            self.screen.blit(self.player_life_image, (i * self.player_life_size, 0))
         
     def draw_background(self, control_rotation):
         # sky
@@ -46,20 +50,24 @@ class ObjectRenderer:
         # floor
         pg.draw.rect(self.game.screen,FLOOR_COLOR,(0,HALF_HEIGHT,WIDTH, HALF_HEIGHT))
         
-    def draw_level_failed(self):
+    def draw_level_failed(self, game_over=False):
         
+        if game_over:
+            self.screen.fill('black')
+            
         self.screen.blit(self.game_over_screen, (0, 0))
-        
-        message = self.message_font.render(f'LEVEL {self.game.level.index + 1} FAILED', False, 'red')
-        width = message.get_rect().width
-        self.screen.blit(message, (HALF_WIDTH - width // 2, HALF_HEIGHT + 200))
+
+        if not game_over:
+            message = self.message_font.render(f'LEVEL {self.game.level.index + 1} FAILED', False, 'red')
+            half_width = message.get_rect().width // 2
+            self.screen.blit(message, (HALF_WIDTH - half_width, HALF_HEIGHT + 200))
         
     def draw_level_won(self):
         self.screen.blit(self.game_won_screen, (0, 0))
         
         message = self.message_font.render(f'LEVEL {self.game.level.index + 1} CLEARED', False, 'white')
-        width = message.get_rect().width
-        self.screen.blit(message, (HALF_WIDTH - width // 2, HALF_HEIGHT + 200))
+        half_width = message.get_rect().width // 2
+        self.screen.blit(message, (HALF_WIDTH - half_width, HALF_HEIGHT + 200))
         
     def draw(self, dimension, control_rotation):
     
@@ -82,6 +90,7 @@ class ObjectRenderer:
             # wall textures, sprites and NPCs
             self.render_game_objects()
             self.draw_player_health()
+            self.draw_player_lives()
                 
     def render_game_objects(self):
         list_objects = sorted(self.game.ray_casting.objects_to_render, key = lambda obj: obj[0], reverse=True)

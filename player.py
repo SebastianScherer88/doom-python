@@ -170,7 +170,6 @@ class Player:
         if self.damaged:
             self.game.screen.blit(self.pain_image, (0, 0))
         
-        
     def mouse_control(self, dimension):
         mx, my = pg.mouse.get_pos()
         

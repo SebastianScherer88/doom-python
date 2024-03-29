@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-from settings import RES, FPS, MOUSE_ROTATION_FLAG, KEY_ROTATION_FLAG
+from settings import RES, FPS, MOUSE_ROTATION_FLAG, KEY_ROTATION_FLAG, N_PLAYER_LIVES
 from level import LEVELS, Level
 from map import Map
 from player import Player
@@ -19,6 +19,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.delta_time = 1
         self.level_index = level_index
+        self.n_player_lives = N_PLAYER_LIVES
         self.new_game()
         
     def new_game(self):
@@ -77,12 +78,18 @@ class Game:
             self.handle_level_completed(dimension, control_rotation)
         
     def handle_level_failed(self, dimension, control_rotation):
-        self.object_renderer.draw_level_failed()
+        
+        self.n_player_lives -= 1
+        game_over = self.n_player_lives < 0
+        
+        self.object_renderer.draw_level_failed(game_over)
         self.sound.theme.stop()
         pg.display.flip()
         pg.time.delay(2500)
-        self.new_game()
-        self.run(dimension, control_rotation)
+        
+        if not game_over:
+            self.new_game()
+            self.run(dimension, control_rotation)
         
     def handle_level_completed(self, dimension, control_rotation):
         self.object_renderer.draw_level_won()
