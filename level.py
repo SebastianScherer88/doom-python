@@ -83,6 +83,11 @@ LEVELS = [
         [
             (CacoDemon, {'pos':(5.5, 7.5)}),
             (CyberDemon, {'pos':(4.5, 16.5)}),
+            (CyberDemon, {'pos':(10.5, 5.5)}),
+            (Soldier, {'pos':(1, 10.5)}),
+            (Soldier, {'pos':(4.5, 15.5)}),
+            (Soldier, {'pos':(14.5, 14.5)}),
+            
         ]
     ),
     (
@@ -113,7 +118,19 @@ LEVELS = [
         ],
         # npcs
         [
-            (CacoDemon, {'pos':(5.5, 7.5)}),
+            (CacoDemon, {'pos':(4.5, 1.5)}),
+            (CyberDemon, {'pos':(4.5, 6.5)}),
+            (Soldier, {'pos':(10.5, 3.5)}),
+            (Soldier, {'pos':(10.5, 5.5)}),
+            (Soldier, {'pos':(10.5, 8.5)}),
+            (CacoDemon, {'pos':(21.5, 3.5)}),
+            (CyberDemon, {'pos':(21.5, 4.5)}),
+            (CyberDemon, {'pos':(6.5, 14.5)}),
+            (CacoDemon, {'pos':(15.5, 11.5)}),
+            (CyberDemon, {'pos':(23.5, 14.5)}),
+            (Soldier, {'pos':(23.5, 7.5)}),
+            (Soldier, {'pos':(23.5, 10.5)}),
+            (CyberDemon, {'pos':(26.5, 16.5)}),
         ]        
     )
 ]
