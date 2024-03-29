@@ -1,6 +1,6 @@
 import pygame as pg
 import math
-from settings import TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, SCALE, RES, WIDTH, HALF_HEIGHT, KEY_ROTATION_FLAG, MOUSE_ROTATION_FLAG, SKY_SCROLLING_RATE, SKY_ROT_SPEED, FLOOR_COLOR
+from settings import TEXTURE_SIZE, BOX_WIDTH, BOX_HEIGHT, MESSAGE_FONT, RES, WIDTH, HALF_HEIGHT, HALF_WIDTH, KEY_ROTATION_FLAG, MOUSE_ROTATION_FLAG, SKY_SCROLLING_RATE, SKY_ROT_SPEED, FLOOR_COLOR
 
 class ObjectRenderer:
     def __init__(self, game):
@@ -15,6 +15,7 @@ class ObjectRenderer:
         self.digits = dict(zip(map(str, range(11)), self.digit_images))
         self.game_over_screen = self.get_texture(path='resources/textures/game_over.png',res=RES)
         self.game_won_screen = self.get_texture(path='resources/textures/win.png',res=RES)
+        self.message_font = pg.font.SysFont(MESSAGE_FONT, 85)
         
     def player_damage(self):
         self.screen.blit(self.blood_screen, (0 ,0))
@@ -45,11 +46,20 @@ class ObjectRenderer:
         # floor
         pg.draw.rect(self.game.screen,FLOOR_COLOR,(0,HALF_HEIGHT,WIDTH, HALF_HEIGHT))
         
-    def draw_game_over(self):
+    def draw_level_failed(self):
+        
         self.screen.blit(self.game_over_screen, (0, 0))
         
-    def draw_game_won(self):
+        message = self.message_font.render(f'LEVEL {self.game.level.index + 1} FAILED', False, 'red')
+        width = message.get_rect().width
+        self.screen.blit(message, (HALF_WIDTH - width // 2, HALF_HEIGHT + 200))
+        
+    def draw_level_won(self):
         self.screen.blit(self.game_won_screen, (0, 0))
+        
+        message = self.message_font.render(f'LEVEL {self.game.level.index + 1} CLEARED', False, 'white')
+        width = message.get_rect().width
+        self.screen.blit(message, (HALF_WIDTH - width // 2, HALF_HEIGHT + 200))
         
     def draw(self, dimension, control_rotation):
     

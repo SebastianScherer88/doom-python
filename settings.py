@@ -49,6 +49,7 @@ MOUSE_CURSOR_SIZE = 10
 SKY_ROT_SPEED = 15
 SKY_SCROLLING_RATE = 0.02
 FLOOR_COLOR = 'darkgray'
+MESSAGE_FONT = 'chalkduster.ttf'
 
 STATIC_SPRITE_PATH = 'resources/sprites/static_sprites/'
 ANIM_SPRITE_PATH = 'resources/sprites/animated_sprites/'

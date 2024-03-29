@@ -77,7 +77,7 @@ class Game:
             self.handle_level_completed(dimension, control_rotation)
         
     def handle_level_failed(self, dimension, control_rotation):
-        self.object_renderer.draw_game_over()
+        self.object_renderer.draw_level_failed()
         self.sound.theme.stop()
         pg.display.flip()
         pg.time.delay(2500)
@@ -85,7 +85,7 @@ class Game:
         self.run(dimension, control_rotation)
         
     def handle_level_completed(self, dimension, control_rotation):
-        self.object_renderer.draw_game_won()
+        self.object_renderer.draw_level_won()
         self.sound.theme.stop()
         pg.display.flip()
         pg.time.delay(2500)
